@@ -1,0 +1,153 @@
+import 'package:flutter/material.dart';
+import 'package:coinsend/features/bluetooth/ble_service.dart';
+import 'package:coinsend/features/auth/pin_verification.dart';
+import 'package:coinsend/core/utils/helpers.dart';
+import 'package:coinsend/features/wallet/wallet_service.dart';
+
+class SenderScreen extends StatefulWidget {
+  const SenderScreen({super.key});
+
+  @override
+  State<SenderScreen> createState() => _SenderScreenState();
+}
+
+class _SenderScreenState extends State<SenderScreen> {
+  final _upiController = TextEditingController();
+  final _amountController = TextEditingController();
+  bool _isSending = false;
+  String? _statusMessage;
+  String? _errorMessage;
+
+  Future<void> _sendCoins() async {
+    final upi = _upiController.text.trim();
+    final amount = double.tryParse(_amountController.text);
+
+    setState(() {
+      _statusMessage = null;
+      _errorMessage = null;
+    });
+
+    if (upi.isEmpty || amount == null || amount <= 0) {
+      setState(() => _errorMessage = 'Enter a valid UPI ID and amount.');
+      return;
+    }
+
+    final pinVerified = await PinVerification.verifyPin(context);
+    if (!pinVerified) {
+      setState(() => _errorMessage = 'PIN/biometric verification failed.');
+      return;
+    }
+
+    setState(() {
+      _isSending = true;
+      _statusMessage = 'Searching for receiver...';
+    });
+
+    final otp = Helpers.generateOTP();
+    final txId = Helpers.generateTransactionId();
+    final senderUpiId = await WalletService.getCurrentUserUpiId();
+
+    try {
+      final result = await BluetoothService().sendTransaction(
+        receiverUpiId: upi,
+        otp: otp,
+        txId: txId,
+        amount: amount,
+        senderUpiId: senderUpiId,
+      );
+
+      if (result != null && result['success'] == true) {
+        // Locally process transaction
+        await WalletService.processTransaction(
+          isSender: true,
+          amount: amount,
+          otp: otp,
+          txId: txId,
+          otherPartyUpi: upi,
+        );
+        setState(() {
+          _statusMessage = 'Coins sent successfully!';
+          _isSending = false;
+        });
+      } else {
+        setState(() {
+          _errorMessage = result?['error'] ?? 'Failed to send coins.';
+          _isSending = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isSending = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _upiController.dispose();
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Send Coins')),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: _upiController,
+              decoration: const InputDecoration(
+                labelText: 'Recipient UPI ID',
+                hintText: 'e.g. user@bank',
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _amountController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                labelText: 'Amount',
+                hintText: 'Enter amount to send',
+              ),
+            ),
+            const SizedBox(height: 30),
+            _isSending
+                ? Column(
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(height: 16),
+                      if (_statusMessage != null)
+                        Text(_statusMessage!, style: const TextStyle(color: Colors.blue)),
+                    ],
+                  )
+                : ElevatedButton.icon(
+                    icon: const Icon(Icons.send),
+                    label: const Text('Send Coins'),
+                    onPressed: _sendCoins,
+                  ),
+            if (_errorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  _errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            if (_statusMessage != null && !_isSending)
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  _statusMessage!,
+                  style: const TextStyle(color: Colors.green),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
