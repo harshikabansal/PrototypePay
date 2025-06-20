@@ -1,0 +1,35 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_root_checker/flutter_root_checker.dart';
+import 'package:local_auth/local_auth.dart';
+
+class SecurityUtils {
+  static final LocalAuthentication _auth = LocalAuthentication();
+
+  static Future<bool> isDeviceSecure() async {
+    try {
+      // Check for root/jailbreak
+      final isRooted = await FlutterRootChecker.isRooted;
+      if (isRooted) return false;
+      
+      // Check if device supports biometrics
+      final canAuthenticate = await _auth.canCheckBiometrics;
+      return canAuthenticate;
+    } on PlatformException {
+      return false;
+    }
+  }
+
+  static Future<bool> authenticateUser() async {
+    try {
+      return await _auth.authenticate(
+        localizedReason: 'Authenticate to access wallet',
+        options: const AuthenticationOptions(
+          biometricOnly: true,
+          stickyAuth: true,
+        ),
+      );
+    } on PlatformException {
+      return false;
+    }
+  }
+}

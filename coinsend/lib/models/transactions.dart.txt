@@ -1,0 +1,43 @@
+class Transaction {
+  final String id;
+  final String sender;
+  final String receiver;
+  final double amount;
+  final String otp;
+  final String status;
+  final DateTime timestamp;
+
+  Transaction({
+    required this.id,
+    required this.sender,
+    required this.receiver,
+    required this.amount,
+    required this.otp,
+    this.status = 'pending',
+    required this.timestamp,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'sender': sender,
+      'receiver': receiver,
+      'amount': amount,
+      'otp': otp,
+      'status': status,
+      'timestamp': timestamp.millisecondsSinceEpoch,
+    };
+  }
+
+  factory Transaction.fromMap(Map<String, dynamic> map) {
+    return Transaction(
+      id: map['id'],
+      sender: map['sender'],
+      receiver: map['receiver'],
+      amount: map['amount'],
+      otp: map['otp'],
+      status: map['status'],
+      timestamp: DateTime.fromMillisecondsSinceEpoch(map['timestamp']),
+    );
+  }
+}

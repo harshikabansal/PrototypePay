@@ -1,0 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:coinsend/features/wallet/wallet_service.dart';
+import 'package:provider/provider.dart';
+
+class BalanceCard extends StatelessWidget {
+  const BalanceCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final walletService = Provider.of<WalletService>(context);
+    
+    return FutureBuilder<double>(
+      future: walletService.getBalance(),
+      builder: (context, snapshot) {
+        final balance = snapshot.data ?? 0.0;
+        return Card(
+          color: Colors.amber[100],
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                const Text(
+                  'Your Balance',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '₹${balance.toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, '/send'),
+                      child: const Text('Send'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, '/receive'),
+                      child: const Text('Receive'),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

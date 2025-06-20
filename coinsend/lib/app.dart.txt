@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:coinsend/features/auth/login_screen.dart';
+import 'package:coinsend/features/wallet/wallet_screen.dart';
+import 'package:coinsend/features/bluetooth/sender_screen.dart';
+import 'package:coinsend/features/bluetooth/receiver_screen.dart';
+import 'package:coinsend/features/wallet/transaction_history.dart';
+import 'package:coinsend/features/bank/fund_transfer_screen.dart';
+import 'package:coinsend/presentation/theme/app_theme.dart';
+
+class CoinSendApp extends StatelessWidget {
+  const CoinSendApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'CoinSend',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/dashboard': (context) => const WalletScreen(),
+        '/send': (context) => const SenderScreen(),
+        '/receive': (context) => const ReceiverScreen(),
+        '/history': (context) => const TransactionHistory(),
+        '/add-funds': (context) => const FundTransferScreen(isAddFunds: true),
+        '/transfer-bank': (context) => const FundTransferScreen(isAddFunds: false),
+      },
+    );
+  }
+}

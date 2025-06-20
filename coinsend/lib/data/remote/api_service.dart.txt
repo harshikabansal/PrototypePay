@@ -1,0 +1,68 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'package:coinsend/core/constants.dart';
+import 'package:coinsend/data/local/secure_storage.dart';
+
+class ApiService {
+  static final _client = http.Client();
+  static const _timeout = Duration(seconds: 30);
+
+  static Future<Map<String, dynamic>> _authenticatedRequest(
+    String method,
+    String endpoint,
+    [Map<String, dynamic>? body]
+  ) async {
+    final token = await SecureStorage.read('auth_token');
+    final uri = Uri.parse('${AppConstants.baseUrl}/$endpoint');
+    
+    try {
+      final response = await _client
+          .request(
+            method,
+            uri,
+            body: body != null ? jsonEncode(body) : null,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+          )
+          .timeout(_timeout);
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('API Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('API Request Failed: $e');
+      rethrow;
+    }
+  }
+
+  static Future<void> syncTransaction(Map<String, dynamic> txData) async {
+    await _authenticatedRequest('POST', 'transactions/sync', txData);
+  }
+
+  static Future<void> addFunds(double amount) async {
+    await _authenticatedRequest('POST', 'wallet/add-funds', {'amount': amount});
+  }
+
+  static Future<void> transferToBank(double amount) async {
+    await _authenticatedRequest('POST', 'wallet/bank-transfer', {'amount': amount});
+  }
+
+  static Future<Map<String, dynamic>> login(String email, String password) async {
+    final response = await _client.post(
+      Uri.parse('${AppConstants.baseUrl}/auth/login'),
+      body: jsonEncode({'email': email, 'password': password}),
+      headers: {'Content-Type': 'application/json'},
+    ).timeout(_timeout);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Login failed: ${response.statusCode}');
+    }
+  }
+}

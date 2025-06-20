@@ -1,0 +1,82 @@
+import 'package:flutter/material.dart';
+import 'package:coinsend/features/auth/pin_verification.dart';
+import 'package:coinsend/features/bank/bank_service.dart';
+
+class FundTransferScreen extends StatefulWidget {
+  final bool isAddFunds;
+  
+  const FundTransferScreen({super.key, this.isAddFunds = true});
+
+  @override
+  State<FundTransferScreen> createState() => _FundTransferScreenState();
+}
+
+class _FundTransferScreenState extends State<FundTransferScreen> {
+  final _amountController = TextEditingController();
+  bool _isProcessing = false;
+  String? _errorMessage;
+
+  Future<void> _processTransfer() async {
+    final amount = double.tryParse(_amountController.text);
+    if (amount == null || amount <= 0) {
+      setState(() => _errorMessage = 'Invalid amount');
+      return;
+    }
+
+    // Verify PIN
+    final verified = await PinVerification.verifyPin(context);
+    if (!verified) {
+      setState(() => _errorMessage = 'PIN verification failed');
+      return;
+    }
+
+    setState(() {
+      _isProcessing = true;
+      _errorMessage = null;
+    });
+
+    try {
+      if (widget.isAddFunds) {
+        await BankService.addFunds(amount);
+      } else {
+        await BankService.transferToBank(amount);
+      }
+      Navigator.pop(context, true);
+    } catch (e) {
+      setState(() => _errorMessage = e.toString());
+    } finally {
+      setState(() => _isProcessing = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.isAddFunds ? 'Add Funds' : 'Transfer to Bank'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            TextField(
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Amount (₹)',
+                errorText: _errorMessage,
+              ),
+            ),
+            const SizedBox(height: 20),
+            _isProcessing
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _processTransfer,
+                    child: Text(widget.isAddFunds ? 'Add Funds' : 'Transfer'),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+}
