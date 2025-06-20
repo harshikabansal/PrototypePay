@@ -1,0 +1,31 @@
+name: coinsend
+description: Secure coin transactions with Bluetooth
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  flutter_blue_plus: ^1.8.0
+  flutter_secure_storage: ^8.0.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  encrypt: ^5.0.1
+  local_auth: ^1.1.6
+  workmanager: ^0.5.1
+  http: ^0.13.6
+  provider: ^6.0.5
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
