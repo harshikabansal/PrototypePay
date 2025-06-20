@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:coinsend/models/transaction.dart';
+import 'package:coinsend/core/utils/helpers.dart';
+
+class TransactionItem extends StatelessWidget {
+  final Transaction transaction;
+  final String? currentUserUpi; // Optional: pass current user's UPI to determine direction
+
+  const TransactionItem({
+    super.key,
+    required this.transaction,
+    this.currentUserUpi,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Determine if this transaction was sent or received
+    final isSent = currentUserUpi != null
+        ? transaction.sender == currentUserUpi
+        : transaction.amount < 0;
+
+    final amountPrefix = isSent ? '-' : '+';
+    final amountColor = isSent ? Colors.red : Colors.green;
+    final counterparty = isSent ? transaction.receiver : transaction.sender;
+
+    return ListTile(
+      leading: Icon(
+        isSent ? Icons.arrow_upward : Icons.arrow_downward,
+        color: amountColor,
+      ),
+      title: Text(
+        '$amountPrefix${Helpers.formatCurrency(transaction.amount.abs())}',
+        style: TextStyle(
+          color: amountColor,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: Text(
+        '${isSent ? "To" : "From"}: $counterparty\n${Helpers.formatDateTime(transaction.timestamp)}',
+        style: const TextStyle(fontSize: 13),
+      ),
+      trailing: Text(
+        transaction.status,
+        style: TextStyle(
+          color: transaction.status == 'completed'
+              ? Colors.green
+              : (transaction.status == 'pending' ? Colors.orange : Colors.red),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      isThreeLine: true,
+    );
+  }
+}
