@@ -1,4 +1,4 @@
-# CoinSend (PrototypePay) - Offline Payment App
+# PrototypePay - Offline Payment App
 
 CoinSend is a modern, offline-first web application designed for secure peer-to-peer coin transactions. Built with Next.js and leveraging local storage for robust offline functionality, it allows users to send and receive funds even without an internet connection, synchronizing everything once the device comes back online.
 
