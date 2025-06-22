@@ -1,0 +1,98 @@
+[
+    {
+      "id": "1750170131736",
+      "email": "john@gmail.com",
+      "hashedPassword": "$2a$10$eoB3UBvXL.VM/IdFpOiIRu.howN/KspS7qVN75HLFRuBVs7LcLeqe",
+      "fullName": "John Doe",
+      "phoneNumber": "7597901955",
+      "upiId": "john@prototypepay"
+    },
+    {
+      "id": "1750181541629",
+      "email": "shawnty@gmail.com",
+      "hashedPassword": "$2a$10$svCHfjKhR9O.bVstjM6f0OhRzSsSiZcHcoGxF/z7JTEh2B2lN/11y",
+      "fullName": "Shawnty",
+      "phoneNumber": "9214536878",
+      "upiId": "shawnty@prototypepay"
+    },
+    {
+      "id": "1750181599657",
+      "email": "shawn@gmail.com",
+      "hashedPassword": "$2a$10$YcbvUfim.0AqX8q.jRss2.QOR8T4LIzy8vDGtrWOQE78k9F87.5Ny",
+      "fullName": "Shawn",
+      "phoneNumber": "9789846511",
+      "upiId": "shawn@prototypepay"
+    },
+    {
+      "id": "1750182265226",
+      "email": "rajesh@gmail.com",
+      "hashedPassword": "$2a$10$bSNzioHTZnXtmPZaQ8vdeOWAPUgmQiwSiTHBa7.F/gj0KUgfz4eRi",
+      "fullName": "Rajesh",
+      "phoneNumber": "9944662288",
+      "upiId": "rajesh@prototypepay"
+    },
+    {
+      "id": "1750182295149",
+      "email": "bala@gmail.com",
+      "hashedPassword": "$2a$10$yR7t3XsBJ8ImeTSGJEX6IumEQarlNLOTl.fD6CT07TehOak93/f3i",
+      "fullName": "Bala kabra",
+      "phoneNumber": "9944662211",
+      "upiId": "bala@prototypepay"
+    },
+    {
+      "id": "1750184356310",
+      "email": "chintu@gmail.com",
+      "hashedPassword": "$2a$10$hlSoqs2BEFV8uuFC02Cr9.yctwLVgJVLEZUUvE2Q7GYSSDsFBDZdq",
+      "fullName": "Chintu Lal",
+      "phoneNumber": "9876543210",
+      "upiId": "chintu@prototypepay"
+    },
+    {
+      "id": "1750184444879",
+      "email": "mohan@gmail.com",
+      "hashedPassword": "$2a$10$jgbPm5NDE7qXla4OAICHTugmd/fPKG4qqJuJZgWH/zIZu.Zj0FCx2",
+      "fullName": "Mohan lal",
+      "phoneNumber": "9870654321",
+      "upiId": "mohan@prototypepay"
+    },
+    {
+      "id": "1750249738571",
+      "email": "kirmada@gmail.com",
+      "hashedPassword": "$2a$10$Tjpt5PUR08Z2KELb6aCeDO/jm/Cd67VNM5PAmSncOCt4HWw.ZARGK",
+      "fullName": "Kirmada",
+      "phoneNumber": "7788445522",
+      "upiId": "kirmada@prototypepay",
+      "bankBalance": 18701,
+      "hashedPin": "$2a$10$U9I/WH.rF6f/h4lwLqIi/ORBY.oxFX.FuL4HI.iHaTmsqoyq5FTTG"
+    },
+    {
+      "id": "1750260103354",
+      "email": "ron@gmail.com",
+      "hashedPassword": "$2a$10$Cfz3kqjc5xzW9QYY/rkj.uEUEc5YgRZPqGHStabmgHlxvGxz277cq",
+      "fullName": "Ron",
+      "phoneNumber": "8855224411",
+      "upiId": "ron@prototypepay",
+      "bankBalance": 19500,
+      "hashedPin": "$2a$10$AmxcJOPLjR6LYzF5lIOk8uD39AiEbN696EO0/n2.ZkLy2grUBU4Q6"
+    },
+    {
+      "id": "1750431625628",
+      "email": "bulbasaur@gmail.com",
+      "hashedPassword": "$2a$10$E11nc25hyGE1s0hD8eR9j.jFJ4PqPZVbb0okVR6U3M0QOr6b.S8Z2",
+      "fullName": "Bulbasaur",
+      "phoneNumber": "8844551236",
+      "upiId": "bulbasaur@prototypepay",
+      "bankBalance": 18294,
+      "hashedPin": "$2a$10$k7d9LyAF6egea/lpUeHGzupc8ivI4OX..kBtSFLQHn.hYoewXvNPe"
+    },
+    {
+      "id": "1750431833536",
+      "email": "squirtle@gmail.com",
+      "hashedPassword": "$2a$10$QxWp6loW7A376COmGJbltelK60FmMTgGgY7VAtoQ3mN5baKRbgVRW",
+      "fullName": "Squirtle ",
+      "phoneNumber": "6622884412",
+      "upiId": "squirtle@prototypepay",
+      "bankBalance": 19450,
+      "hashedPin": "$2a$10$pqNIVao/cYJ2g7wMxMiOU.q1bqhdQD9246QJWGa6HQso1aiWPuRqq"
+    }
+  ]
