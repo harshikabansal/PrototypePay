@@ -1,9 +1,0 @@
-import 'package:flutter/material.dart';
-import 'package:coinsend/app.dart';
-import 'package:coinsend/data/remote/sync_service.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SyncService.initialize();
-  runApp(const CoinSendApp());
-}
