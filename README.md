@@ -1,2 +1,0 @@
-# coinsend
-offline payment app
