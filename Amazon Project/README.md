@@ -2,7 +2,7 @@
 
 CoinSend is a modern, offline-first web application designed for secure peer-to-peer coin transactions. Built with Next.js and leveraging local storage for robust offline functionality, it allows users to send and receive funds even without an internet connection, synchronizing everything once the device comes back online.
 
-![CoinSend Dashboard]("(https://ibb.co/5ht4QGT8)")
+![CoinSend Dashboard](https://drive.google.com/file/d/10MMalJh_or7dBZ81-dhMrPW5iceRu3Ok/view?usp=sharing)
 *<p align="center">A placeholder for the app's dashboard view.</p>*
 
 ## Core Features
