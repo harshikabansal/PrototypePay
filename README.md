@@ -1,14 +1,15 @@
-# PrototypePay - Offline Payment App
+# PototypePay- Offline-Capable Payment App
 
-Prototypepay is a modern, offline-first web application designed for secure peer-to-peer coin transactions. Built with Next.js and leveraging local storage for robust offline functionality, it allows users to send and receive funds even without an internet connection, synchronizing everything once the device comes back online.
+PrototypePay is a modern, offline-capable web application designed for secure peer-to-peer coin transactions. Built with Next.js and leveraging encrypted local storage for robust offline functionality, it allows users to send and receive funds even without an internet connection, synchronizing everything once the device comes back online.
 
-
+![CoinSend Dashboard](https://placehold.co/800x450.png?text=CoinSend+Dashboard+Screenshot)
+*<p align="center">A placeholder for the app's dashboard view.</p>*
 
 ## Core Features
 
-- **Offline QR-Based Transactions:** Generate and scan QR codes to initiate transactions entirely offline.
+- **Offline QR-Based Transactions:** Generate and scan QR codes to initiate and claim transactions entirely offline.
 - **Immediate Local Balance Updates:** Wallets are debited and credited instantly on the device for a seamless user experience.
-- **Eventual Consistency Model:** Offline actions are queued and automatically synchronized with the server upon reconnection.
+- **Eventual Consistency Model:** Offline actions are queued and automatically synchronized with the server upon reconnection, with reconciliation logic to ensure financial integrity.
 - **AI-Powered Spending Analysis:** "Propo," the AI assistant, analyzes spending habits (including unsynced offline transactions) and provides forecasts with charts.
 - **Offline FAQ Chatbot:** Get instant answers to common questions from Propo, anytime, anywhere.
 - **Bank Integration:** Add funds from a linked bank account and transfer coins back to the bank (online-only features).
@@ -16,11 +17,11 @@ Prototypepay is a modern, offline-first web application designed for secure peer
 
 ## Security Features
 
+- **Client-Side Data Encryption:** All sensitive user data stored locally on the device (in the browser's local storage)—such as user profile information, wallet balances, and transaction logs—is encrypted using the AES algorithm via `crypto-js`. This provides a strong layer of security against direct inspection of on-device data.
+
 - **Secure Authentication & Authorization:**
     - **Password & PIN Hashing:** We use the industry-standard `bcryptjs` library to securely hash all user passwords and PINs. Plaintext credentials are never stored.
     - **PIN-Protected Actions:** Sensitive financial operations, like adding funds from a bank or transferring coins to a bank, require the user's 4-digit PIN for authorization on the server.
-
-- **Client-Side Data Encryption:** All sensitive user data stored locally on the device (in the browser's local storage), such as user profile information, wallet balances, and transaction logs, is encrypted using AES. This provides an additional layer of security against direct inspection of on-device data.
 
 - **AI-Powered Fraud Detection:**
     - For higher-risk operations like transferring coins to a bank, an AI model analyzes the transaction in real-time to calculate a risk score and flag potentially fraudulent activity.
@@ -37,7 +38,7 @@ Prototypepay is a modern, offline-first web application designed for secure peer
 - **Framework:** [Next.js](https://nextjs.org/) (App Router, Server Components)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **UI:** [React](https://react.dev/), [ShadCN UI](https://ui.shadcn.com/), [Tailwind CSS](https://tailwindcss.com/)
-- **Generative AI:** [Firebase Genkit](https://firebase.google.com/docs/genkit) (for Propo's analysis)
+- **Generative AI:** [Firebase Genkit](https://firebase.google.com/docs/genkit) (for Propo's analysis and fraud detection)
 - **Charting:** [Recharts](https://recharts.org/)
 - **Offline Storage:** Browser Local Storage (with AES Encryption)
 - **Security:** [crypto-js](https://github.com/brix/crypto-js) for client-side encryption, [bcryptjs](https://github.com/dcodeIO/bcrypt.js) for hashing.
@@ -67,9 +68,9 @@ Follow these instructions to get a copy of the project up and running on your lo
 3.  **Set up Environment Variables:**
     This project may require Firebase credentials for features like profile picture uploads. Create a `.env` file in the root of the project and add any necessary keys. (Refer to `src/lib/firebase.ts` for required `NEXT_PUBLIC_FIREBASE_*` variables).
     
-    You should also add a key for local storage encryption:
+    You must also add a key for local storage encryption:
     ```
-    LOCAL_STORAGE_ENCRYPTION_KEY=your-super-secret-key-for-encryption
+    LOCAL_STORAGE_ENCRYPTION_KEY=your-super-secret-key-for-encryption-32-chars
     ```
 
 4.  **Run the development server:**
@@ -88,7 +89,7 @@ A user can complete their entire side of a transaction without an internet conne
 
 - **Navigate:** The sender opens the "Send Coins (QR)" page.
 - **Action:** They enter the recipient's UPI ID and the desired amount.
-- **Finalize Locally:** They click the "Generate QR & Prepare Transaction" button.
+- **Finalize Locally:** They click the "Generate QR & Debit Coins" button.
 - **What Happens Offline:**
     1.  **Immediate Debit:** The sender's local coin balance is instantly debited.
     2.  **Queue for Sync:** A `LocalDebitRecord` containing all transaction details (`transactionId`, amount, recipient, etc.) is saved to the sender's device in an encrypted format. This record is a queue item, waiting to be sent to the server.
@@ -98,7 +99,7 @@ A user can complete their entire side of a transaction without an internet conne
 
 The receiver can also scan a QR code and have the funds credited to their main spendable wallet, all while offline.
 
-- **Navigate:** The receiver opens the "Scan QR to Receive Coins" page.
+- **Navigate:** The receiver opens the "Receive via QR Scan" page.
 - **Action (Step 1 - Scan):** They scan the QR code from the sender's screen.
 - **What Happens Offline (Scan):**
     1.  The QR code is parsed, and the transaction details are understood by the app.
@@ -121,11 +122,12 @@ The app's help system is fully functional offline.
 
 ### Eventual Consistency: The Role of the Server
 
-All offline actions are logged locally on the respective user's device. When a user's device comes online, the app automatically attempts to synchronize these local records with the server:
+All offline actions are logged locally on each user's device. When a user's device comes online, the app automatically attempts to synchronize these local records with the server:
 -   **Senders' apps** will report the debits they queued.
 -   **Receivers' apps** will report the claims they made.
 
 The server acts as the central source of truth to ensure that all transactions are eventually validated and reconciled across the network. If a discrepancy arises (e.g., a receiver claimed coins for a transaction the sender never synced), the system is designed to handle this during reconciliation, which may involve reversing a local credit.
+
 
 -  **Note:** This app is **not a Progressive Web App (PWA)**. Offline functionality is available but not handled through service workers or caching strategies. To test offline mode:
 
@@ -138,5 +140,4 @@ The server acts as the central source of truth to ensure that all transactions a
 - **Platform:** Built with [Firebase Studio](https://firebase.google.com/)
 
 
-Preview Link for you :)
-https://9000-firebase-studio-1750151412148.cluster-bg6uurscprhn6qxr6xwtrhvkf6.cloudworkstations.dev
+
