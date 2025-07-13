@@ -127,6 +127,15 @@ All offline actions are logged locally on the respective user's device. When a u
 
 The server acts as the central source of truth to ensure that all transactions are eventually validated and reconciled across the network. If a discrepancy arises (e.g., a receiver claimed coins for a transaction the sender never synced), the system is designed to handle this during reconciliation, which may involve reversing a local credit.
 
+> **Note:** This app is **not a Progressive Web App (PWA)**. Offline functionality is available but not handled through service workers or caching strategies. To test offline mode:
+>
+> - Navigate to the **"Send Coins"** or **"Receive Coins"** page.
+> - Open browser DevTools (Right-click → Inspect).
+> - Go to the **Network** tab.
+> - Set the network to **Offline**.
+> - Interact with the app to test offline behavior.
+
+
 
 Preview Link for you :)
 https://9000-firebase-studio-1750151412148.cluster-bg6uurscprhn6qxr6xwtrhvkf6.cloudworkstations.dev
